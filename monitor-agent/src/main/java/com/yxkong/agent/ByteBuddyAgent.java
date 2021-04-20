@@ -2,7 +2,7 @@ package com.yxkong.agent;
 
 import com.yxkong.agent.advice.ThreadPoolExecutorConstructorAdvice;
 import com.yxkong.agent.advice.ThreadPoolExecutorExecuteAdvice;
-import com.yxkong.agent.advice.ThreadPoolExecutorFinalizeAdvice;
+import com.yxkong.agent.advice.ThreadPoolExecutorDestroyAdvice;
 import com.yxkong.agent.httpserver.*;
 import com.yxkong.agent.httpserver.collector.CollectorRegistry;
 import com.yxkong.agent.utils.InetAddrUtil;
@@ -84,7 +84,7 @@ public class ByteBuddyAgent {
                 //.or(ElementMatchers.hasSuperType(ElementMatchers.named("java.util.concurrent.Executor")))
                 //.or(ElementMatchers.hasSuperType(ElementMatchers.named("java.util.concurrent.ExecutorService")))
                 .transform((builder, typeDescription, classLoader, javaModule) ->
-                        builder.visit(Advice.to(ThreadPoolExecutorFinalizeAdvice.class)
+                        builder.visit(Advice.to(ThreadPoolExecutorDestroyAdvice.class)
                                     .on(ElementMatchers.named("finalize")
                                     .or(ElementMatchers.named("shutdown")
                                     .or(ElementMatchers.named("shutdownNow")))))
