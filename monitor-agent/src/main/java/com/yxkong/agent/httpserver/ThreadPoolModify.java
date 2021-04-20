@@ -7,6 +7,7 @@ import com.yxkong.agent.httpserver.collector.Collector;
 import com.yxkong.agent.utils.StringUtils;
 
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +50,10 @@ public class ThreadPoolModify extends Collector {
                 //如果将线程池改小，设置下，默认核心线程数是不会回收的
                 executor.allowCoreThreadTimeOut(true);
             }
+            BlockingQueue<Runnable> queue = executor.getQueue();
+            /**
+             * 通过反射修改队列的长度 TODO
+             */
             return new ResultBean.Builder().success(executor).build();
         } catch (Exception e) {
             e.printStackTrace();
