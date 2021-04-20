@@ -59,6 +59,7 @@ public class HTTPServer {
                         path = path.substring(1);
                     }
                     String data = registry.filteredCollector(path,paramMap);
+                    System.out.println(data);
                     t.sendResponseHeaders(HttpURLConnection.HTTP_OK, data.getBytes().length);
                     os.write(data.getBytes());
                 }

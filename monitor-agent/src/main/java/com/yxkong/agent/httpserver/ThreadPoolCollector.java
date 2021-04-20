@@ -8,7 +8,7 @@ import com.yxkong.agent.httpserver.collector.Collector;
 import java.util.Map;
 
 /**
- * TODO
+ * 线程池信息收集
  *
  * @author yxkong
  * @version 1.0

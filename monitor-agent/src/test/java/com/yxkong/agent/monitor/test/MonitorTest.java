@@ -31,9 +31,9 @@ public class MonitorTest {
     @Test
     @DisplayName("线程池监控测试")
     public void test(){
-        System.out.println(ThreadPoolMonitorData.class.getClassLoader());
-        System.out.println(ThreadPoolMonitorData.alls());
-        System.out.println(ThreadPoolMonitor.class.getClassLoader());
+        System.out.println("获取ThreadPoolMonitorData的类加载器："+ThreadPoolMonitorData.class.getClassLoader());
+        System.out.println("获取ThreadPoolMonitorData收集的线程池："+ThreadPoolMonitorData.alls());
+        System.out.println("获取ThreadPoolMonitor的类加载器："+ThreadPoolMonitor.class.getClassLoader());
         ThreadPoolExecutor pool= threadpool();
         pool.submit(()->{
             System.out.println("线程池pool执行中1:"+Thread.currentThread().getName());
@@ -51,11 +51,11 @@ public class MonitorTest {
         });
 
 
-        System.out.println(JSON.toJSON(ThreadPoolMonitorData.alls()));
+        System.out.println("线程池启动完再获取收集的线程池：\r\n"+JSON.toJSON(ThreadPoolMonitorData.alls()));
 
-        ThreadPoolMonitorData.alls().forEach((key,val) ->{
-            System.out.println("ThreadPoolMonitorData key="+key+" val:"+val);
-        });
+        //ThreadPoolMonitorData.alls().forEach((key,val) ->{
+        //    System.out.println("ThreadPoolMonitorData key="+key+" val:"+val);
+        //});
         //executorService.shutdownNow();
         //ThreadPoolMonitor monitor = new ThreadPoolMonitor();
         //monitor.alls().forEach((key,val)->{

@@ -4,6 +4,7 @@ import com.yxkong.agent.advice.ThreadPoolExecutorExecuteAdvice;
 import com.yxkong.agent.advice.ThreadPoolExecutorFinalizeAdvice;
 import com.yxkong.agent.httpserver.*;
 import com.yxkong.agent.httpserver.collector.CollectorRegistry;
+import com.yxkong.agent.utils.InetAddrUtil;
 import com.yxkong.agent.utils.StringUtils;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
@@ -55,15 +56,11 @@ public class ByteBuddyAgent {
                 port = 8090;
             }
             if(StringUtils.isEmpty(host)) {
-                try {
-                    InetAddress ip4 = Inet4Address.getLocalHost();
-                    host = ip4.getHostAddress();
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                host = InetAddrUtil.getHost();
             }
             InetSocketAddress socket = new InetSocketAddress(host, port);
             server = new HTTPServer(socket, CollectorRegistry.defaultRegistry, true);
+            System.out.println(String.format("启动server：%s:%d",host,port ));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

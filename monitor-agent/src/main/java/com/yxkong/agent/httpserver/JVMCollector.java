@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * jvm监控是现实
+ * 参考：https://blog.csdn.net/tjiyu/article/details/103888169
  * @Author: yxkong
  * @Date: 2021/4/19 12:38 下午
  * @version: 1.0
