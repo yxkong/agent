@@ -1,6 +1,6 @@
 package com.yxkong.agent.monitor.test;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.yxkong.agent.NamedThreadFactory;
 import com.yxkong.agent.ThreadPoolMonitor;
 import com.yxkong.agent.data.ThreadPoolMonitorData;
@@ -51,7 +51,7 @@ public class MonitorTest {
         });
 
 
-        System.out.println("线程池启动完再获取收集的线程池：\r\n"+JSON.toJSON(ThreadPoolMonitorData.alls()));
+        System.out.println("线程池启动完再获取收集的线程池：\r\n"+new Gson().toJson(ThreadPoolMonitorData.alls()));
 
         //ThreadPoolMonitorData.alls().forEach((key,val) ->{
         //    System.out.println("ThreadPoolMonitorData key="+key+" val:"+val);

@@ -1,6 +1,7 @@
 package com.yxkong.agent.httpserver.collector;
 
-import com.alibaba.fastjson.JSON;
+
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,7 +79,8 @@ public class CollectorRegistry {
      */
     public String filteredCollector(String name,Map<String,String> params ) {
         Collector collector = namesToCollectors.get(name);
-        return JSON.toJSON(collector.collect(params)).toString();
+        //return JSON.toJSON(collector.collect(params)).toString();
+        return  new Gson().toJson(collector.collect(params));
     }
 
 }

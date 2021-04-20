@@ -40,7 +40,7 @@
         <configuration>
           <artifactSet>
             <includes>
-              <include>com.alibaba:fastjson:jar:</include>
+              <include>com.google.code.gson:gson:jar:</include>
               <include>net.bytebuddy:byte-buddy:jar:</include>
               <include>net.bytebuddy:byte-buddy-agent:jar:</include>
             </includes>
@@ -84,6 +84,7 @@
   </dependencies>
   <properties>
     <main.class.path>com.yxkong.agent.ByteBuddyAgent</main.class.path>
+    <gson.version>2.8.6</gson.version>
     <bytebuddy.version>1.10.21</bytebuddy.version>
     <javassist.version>3.27.0-GA</javassist.version>
     <maven.compiler.source>8</maven.compiler.source>
