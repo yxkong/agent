@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 
 /**
- * 线程池advice
+ * 线程池Execute增强
  *
  * @Author: yxk
  * @Date: 2021/4/11 5:34 下午
@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ThreadPoolExecutorExecuteAdvice {
     /**
-     * 对所有的线程的execute 进入方法进行监听
+     * 对所有的线程的execute 进入方法进行增强
      * byteBuddy不支持对constructor
      * @Advice.OnMethodEnter 必须作用与static方法
      * @param obj
@@ -26,32 +26,17 @@ public class ThreadPoolExecutorExecuteAdvice {
     @Advice.OnMethodEnter
     public static void executeBefore(@Advice.This Object obj,@Advice.Argument(0) Object abc){
        try{
-           ThreadPoolExecutor executor = (ThreadPoolExecutor) obj;
+           //以下代码不能抽取，一旦抽取，必须用bootstrap加载器加载
+           ThreadPoolExecutor executor = (ThreadPoolExecutor)obj;
            final ThreadFactory threadFactory = executor.getThreadFactory();
            if(threadFactory instanceof NamedThreadFactory){
                NamedThreadFactory namedThreadFactory = (NamedThreadFactory) threadFactory;
-               ThreadPoolMonitorData.add(namedThreadFactory.getName(),namedThreadFactory.getDesc(),(ThreadPoolExecutor) obj);
+               ThreadPoolMonitorData.add(namedThreadFactory.getName(),namedThreadFactory.getDesc(), executor);
            }else {
-               ThreadPoolMonitorData.add(executor.hashCode()+"","未使用提供的NamedThreadFactory",(ThreadPoolExecutor) obj);
+               ThreadPoolMonitorData.add(executor.getClass().getName()+"@"+executor.hashCode(),"未使用提供的NamedThreadFactory", executor);
            }
-
        }catch (Exception e){
            e.printStackTrace();
        }
     }
-    //@RuntimeType
-    //public static Object execute(@Origin Method method,@AllArguments Object[] allArguments,
-    //                           @SuperCall Callable<?> callable) throws Exception {
-    //    long start = System.currentTimeMillis();
-    //    try {
-    //        for (Object argument : allArguments) {
-    //            System.out.println(argument);
-    //        }
-    //        // 原有函数执行
-    //        return callable.call();
-    //    } finally {
-    //        System.out.println("execute 花费时间:" + (System.currentTimeMillis() - start) + "ms");
-    //    }
-    //}
-
 }

@@ -1,5 +1,6 @@
 package com.yxkong.agent;
 
+import com.yxkong.agent.advice.ThreadPoolExecutorConstructorAdvice;
 import com.yxkong.agent.advice.ThreadPoolExecutorExecuteAdvice;
 import com.yxkong.agent.advice.ThreadPoolExecutorFinalizeAdvice;
 import com.yxkong.agent.httpserver.*;
@@ -11,10 +12,7 @@ import net.bytebuddy.asm.Advice;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import java.lang.instrument.Instrumentation;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.ThreadPoolExecutor;
 
 
@@ -88,8 +86,13 @@ public class ByteBuddyAgent {
                 .transform((builder, typeDescription, classLoader, javaModule) ->
                         builder.visit(Advice.to(ThreadPoolExecutorFinalizeAdvice.class)
                                     .on(ElementMatchers.named("finalize")
-                                    .or(ElementMatchers.named("shutdown"))))
-                                .visit(Advice.to(ThreadPoolExecutorExecuteAdvice.class).on(ElementMatchers.named("execute")))
+                                    .or(ElementMatchers.named("shutdown")
+                                    .or(ElementMatchers.named("shutdownNow")))))
+                                .visit(Advice.to(ThreadPoolExecutorExecuteAdvice.class)
+                                        .on(ElementMatchers.named("execute")))
+                                .visit(Advice.to(ThreadPoolExecutorConstructorAdvice.class)
+                                        .on(ElementMatchers.isConstructor()))
+
                 )
                 .installOn(instrumentation);
     }
