@@ -1,0 +1,17 @@
+server:
+  port: 8088
+  tomcat:
+    uri-encoding: UTF-8
+    accept-count: 100
+    max-connections: 200
+    threads:
+      max: 100
+      minSpare: 10
+    connectionTimeout: 5000
+  compression:
+    enabled: true
+  # 开启优雅停机kill -2 可以优雅停机
+  shutdown: graceful
+spring:
+  application:
+    name: springboot-test
