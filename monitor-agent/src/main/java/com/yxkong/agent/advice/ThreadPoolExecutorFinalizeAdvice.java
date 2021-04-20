@@ -23,7 +23,7 @@ public class ThreadPoolExecutorFinalizeAdvice {
             NamedThreadFactory namedThreadFactory = (NamedThreadFactory) threadFactory;
             ThreadPoolMonitorData.remove(namedThreadFactory.getName());
         }else {
-            ThreadPoolMonitorData.remove(obj.hashCode()+"");
+            ThreadPoolMonitorData.remove(executor.getClass().getName()+"@"+obj.hashCode());
         }
     }
 
