@@ -3,9 +3,14 @@ package com.yxkong.agent.httpserver;
 import com.yxkong.agent.data.ThreadPoolExecutorWraper;
 import com.yxkong.agent.data.ThreadPoolMonitorData;
 import com.yxkong.agent.dto.ResultBean;
+import com.yxkong.agent.dto.ThreadPoolVo;
 import com.yxkong.agent.httpserver.collector.Collector;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 线程池信息收集
@@ -24,8 +29,22 @@ public class ThreadPoolCollector extends Collector {
         String key = params.get("key");
         ThreadPoolExecutorWraper executor = alls.get(key);
         if(null != executor){
-            return new ResultBean.Builder().success(executor).build();
+            ThreadPoolVo vo =  new ThreadPoolVo.Builder()
+                    .name(executor.getName())
+                    .desc(executor.getDesc())
+                    .threadPoolExecutor(executor.getExecutor())
+                    .build();
+            return new ResultBean.Builder().success(vo).build();
         }
-        return new ResultBean.Builder().success(alls).build();
+        Map<String,ThreadPoolVo> map = new HashMap<>();
+        alls.forEach((k,v)->{
+            ThreadPoolVo threadPoolVo =  new ThreadPoolVo.Builder()
+                    .name(v.getName())
+                    .desc(v.getDesc())
+                    .threadPoolExecutor(v.getExecutor())
+                    .build();
+            map.put(k,threadPoolVo);
+        });
+        return new ResultBean.Builder().success(map).build();
     }
 }
