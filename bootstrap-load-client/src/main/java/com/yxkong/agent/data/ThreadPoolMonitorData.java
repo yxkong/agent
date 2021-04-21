@@ -15,6 +15,8 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @version: 1.0
  */
 public class ThreadPoolMonitorData {
+    final static String KEY = "key";
+    final static String DESC = "desc";
     private static Map<String, ThreadPoolExecutorWraper> threadPoolExecutorWraperMap = new HashMap<>();
 
     public static Map<String, ThreadPoolExecutorWraper> alls(){
@@ -25,11 +27,11 @@ public class ThreadPoolMonitorData {
      * @param executor
      */
     public  void add(ThreadPoolExecutor executor){
-        final Pair<String, String> info = getInfo(executor);
-        ThreadPoolExecutorWraper data = new ThreadPoolExecutorWraper(info.getKey(),info.getValue(),executor);
-        put(info.getKey(),data);
+        final String[] info = getInfo(executor);
+        ThreadPoolExecutorWraper data = new ThreadPoolExecutorWraper(info[0],info[1],executor);
+        put(info[0],data);
     }
-    private static Pair<String,String> getInfo(ThreadPoolExecutor executor){
+    private static String[] getInfo(ThreadPoolExecutor executor){
         final ThreadFactory threadFactory = executor.getThreadFactory();
         String key = executor.getClass().getName()+"@"+executor.hashCode();
         String desc = "未使用提供的NamedThreadFactory";
@@ -38,7 +40,7 @@ public class ThreadPoolMonitorData {
             key = namedThreadFactory.getName();
             desc = namedThreadFactory.getDesc();
         }
-        return new Pair<>(key,desc);
+        return new String[]{key,desc};
     }
 
     /**
@@ -61,9 +63,9 @@ public class ThreadPoolMonitorData {
      * @param executor
      */
     public static void remove(ThreadPoolExecutor executor){
-        final Pair<String, String> info = getInfo(executor);
-        if(threadPoolExecutorWraperMap.containsKey(info.getKey())){
-            threadPoolExecutorWraperMap.remove(info.getKey());
+        final String[] info = getInfo(executor);
+        if(threadPoolExecutorWraperMap.containsKey(info[0])){
+            threadPoolExecutorWraperMap.remove(info[1]);
         }
     }
 }
