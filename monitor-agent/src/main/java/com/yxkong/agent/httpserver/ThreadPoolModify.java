@@ -3,6 +3,7 @@ package com.yxkong.agent.httpserver;
 import com.yxkong.agent.data.ThreadPoolExecutorWraper;
 import com.yxkong.agent.data.ThreadPoolMonitorData;
 import com.yxkong.agent.dto.ResultBean;
+import com.yxkong.agent.dto.ThreadPoolVo;
 import com.yxkong.agent.httpserver.collector.Collector;
 import com.yxkong.agent.utils.StringUtils;
 
@@ -54,7 +55,12 @@ public class ThreadPoolModify extends Collector {
             /**
              * 通过反射修改队列的长度 TODO
              */
-            return new ResultBean.Builder().success(executor).build();
+            ThreadPoolVo vo =  new ThreadPoolVo.Builder()
+                    .name(executorWraper.getName())
+                    .desc(executorWraper.getDesc())
+                    .threadPoolExecutor(executorWraper.getExecutor())
+                    .build();
+            return new ResultBean.Builder().success(vo).build();
         } catch (Exception e) {
             e.printStackTrace();
         }

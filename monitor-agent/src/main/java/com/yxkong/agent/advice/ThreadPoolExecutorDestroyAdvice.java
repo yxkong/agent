@@ -18,13 +18,7 @@ public class ThreadPoolExecutorDestroyAdvice {
     @Advice.OnMethodEnter
     public static void finalize(@Advice.This Object obj){
         ThreadPoolExecutor executor = (ThreadPoolExecutor) obj;
-        final ThreadFactory threadFactory = executor.getThreadFactory();
-        if(threadFactory instanceof NamedThreadFactory){
-            NamedThreadFactory namedThreadFactory = (NamedThreadFactory) threadFactory;
-            ThreadPoolMonitorData.remove(namedThreadFactory.getName());
-        }else {
-            ThreadPoolMonitorData.remove(executor.getClass().getName()+"@"+obj.hashCode());
-        }
+        ThreadPoolMonitorData.remove(executor);
     }
 
 }

@@ -28,13 +28,8 @@ public class ThreadPoolExecutorExecuteAdvice {
        try{
            //以下代码不能抽取，一旦抽取，必须用bootstrap加载器加载
            ThreadPoolExecutor executor = (ThreadPoolExecutor)obj;
-           final ThreadFactory threadFactory = executor.getThreadFactory();
-           if(threadFactory instanceof NamedThreadFactory){
-               NamedThreadFactory namedThreadFactory = (NamedThreadFactory) threadFactory;
-               ThreadPoolMonitorData.add(namedThreadFactory.getName(),namedThreadFactory.getDesc(), executor);
-           }else {
-               ThreadPoolMonitorData.add(executor.getClass().getName()+"@"+executor.hashCode(),"未使用提供的NamedThreadFactory", executor);
-           }
+           ThreadPoolMonitorData data = new ThreadPoolMonitorData();
+           data.add(executor);
        }catch (Exception e){
            e.printStackTrace();
        }

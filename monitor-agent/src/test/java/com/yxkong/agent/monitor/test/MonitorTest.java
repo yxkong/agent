@@ -4,12 +4,15 @@ import com.google.gson.Gson;
 import com.yxkong.agent.NamedThreadFactory;
 import com.yxkong.agent.ThreadPoolMonitor;
 import com.yxkong.agent.data.ThreadPoolMonitorData;
+import com.yxkong.agent.dto.ThreadPoolVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -49,9 +52,17 @@ public class MonitorTest {
         executorService.submit(()->{
             System.out.println("线程池executorService执行中1:"+Thread.currentThread().getName());
         });
+        Map<String, ThreadPoolVo> map = new HashMap<>();
+        ThreadPoolMonitorData.alls().forEach((k,v)->{
+            ThreadPoolVo threadPoolVo =  new ThreadPoolVo.Builder()
+                    .name(v.getName())
+                    .desc(v.getDesc())
+                    .threadPoolExecutor(v.getExecutor())
+                    .build();
+            map.put(k,threadPoolVo);
+        });
 
-
-        System.out.println("线程池启动完再获取收集的线程池：\r\n"+new Gson().toJson(ThreadPoolMonitorData.alls()));
+        System.out.println("线程池启动完再获取收集的线程池：\r\n"+new Gson().toJson(map));
 
         //ThreadPoolMonitorData.alls().forEach((key,val) ->{
         //    System.out.println("ThreadPoolMonitorData key="+key+" val:"+val);
