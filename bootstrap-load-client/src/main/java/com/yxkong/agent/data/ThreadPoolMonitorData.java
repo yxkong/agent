@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 线程池监控data
+ * TODO 将对线程池的引用改成弱引用
  * @Author: yxk
  * @Date: 2021/4/3 10:29 上午
  * @version: 1.0

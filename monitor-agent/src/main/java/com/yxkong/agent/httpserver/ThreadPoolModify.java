@@ -38,10 +38,10 @@ public class ThreadPoolModify extends Collector {
                 return new ResultBean.Builder().status("1000").message("没有找到对应的线程池").build();
             }
             ThreadPoolExecutor executor = executorWraper.getExecutor();
-            if(StringUtils.isNotEmpty(coreSize)){
+            if(StringUtils.isNotEmpty(coreSize) && StringUtils.isNumber(coreSize)){
                 executor.setCorePoolSize(Integer.parseInt(coreSize));
             }
-            if(StringUtils.isNotEmpty(maximumPoolSize)){
+            if(StringUtils.isNotEmpty(maximumPoolSize) && StringUtils.isNumber(maximumPoolSize)){
                 executor.setMaximumPoolSize(Integer.parseInt(maximumPoolSize));
             }
             //启动所有的核心线程数，getTask中不会根据核心线程数修改workers，如果再有新线程，会动态调整
@@ -53,7 +53,11 @@ public class ThreadPoolModify extends Collector {
             }
             BlockingQueue<Runnable> queue = executor.getQueue();
             /**
-             * 通过反射修改队列的长度 TODO
+             * TODO
+             * 枚举BlockingQueue的实现，
+             * 针对数组结构，可以调小队列长度，记录原始数组，最大不能超过原始数组长度（调的比原始的大，得做数据搬迁，麻烦）
+             * 针对链表结构，可以调大调小队列长度，
+             * 最终实现通过反射修改队列的长度
              */
             ThreadPoolVo vo =  new ThreadPoolVo.Builder()
                     .name(executorWraper.getName())
