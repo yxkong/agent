@@ -18,3 +18,47 @@
 说明：
 - monitor-agent-0.1.jar 为agent包
 - bootstrap-load-client-0.1.jar  为Bootstrap ClassLoader加载的包，在增强ThreadPoolExecutor的时候，必须是启动类加载
+
+
+
+ps:
+如果改造LinkedBlockingDeque队列，请注意
+一旦队列满了put会阻塞，如果不再重新添加任务不会触发
+
+```
+    public void putFirst(E e) throws InterruptedException {
+        if (e == null) throw new NullPointerException();
+        Node<E> node = new Node<E>(e);
+        final ReentrantLock lock = this.lock;
+        lock.lock();
+        try {
+            //一旦满了阻塞
+            while (!linkFirst(node))
+                notFull.await();
+        } finally {
+            lock.unlock();
+        }
+    }
+    public void putLast(E e) throws InterruptedException {
+        if (e == null) throw new NullPointerException();
+        Node<E> node = new Node<E>(e);
+        final ReentrantLock lock = this.lock;
+        lock.lock();
+        try {
+            //一旦满了阻塞
+            while (!linkLast(node))
+                notFull.await();
+        } finally {
+            lock.unlock();
+        }
+    }
+    //修改capacity，后后续的线程没问题，但是之前阻塞的不会继续执行，所以加notFull.signalAll();
+    public void setCapacity(int capacity) {
+      final int oldCapacity = this.capacity;
+      this.capacity = capacity;
+      final int size = count.get();
+      if (capacity > size && size >= oldCapacity) {
+          notFull.signalAll();
+      }
+  }
+```
